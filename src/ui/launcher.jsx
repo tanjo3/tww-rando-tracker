@@ -254,10 +254,10 @@ export default class Launcher extends React.PureComponent {
             labelText: 'Logic Type',
             optionName: Permalink.OPTIONS.LOGIC_MOD,
           }),
-          // this.toggleInput({
-          //   labelText: 'Randomize Starting Island',
-          //   optionName: Permalink.OPTIONS.RANDOMIZE_STARTING_ISLAND,
-          // }),
+          this.toggleInput({
+            labelText: 'Randomize Starting Island',
+            optionName: Permalink.OPTIONS.RANDOMIZE_STARTING_ISLAND,
+          }),
           this.dropdownInput({
             labelText: 'Item Pool',
             optionName: Permalink.OPTIONS.CONVENIENCE_OPTION,

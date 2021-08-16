@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import LogicHelper from '../services/logic-helper';
+import TrackerState from '../services/tracker-state';
 
 import Storage from './storage';
 
@@ -25,6 +26,7 @@ class Buttons extends React.PureComponent {
       entrancesListOpen,
       onlyProgressLocations,
       startingIslandListOpen,
+      trackerState,
       trackSpheres,
       toggleColorPicker,
       toggleDisableLogic,
@@ -46,6 +48,7 @@ class Buttons extends React.PureComponent {
       ? 'Cancel'
       : 'Choose Starting Island';
     const isRandomStartingIsland = LogicHelper.isRandomStartingIsland();
+    const requireSelectionRSI = trackerState.startingIsland === null;
 
     return (
       <div className="buttons">
@@ -75,6 +78,7 @@ class Buttons extends React.PureComponent {
         {
           isRandomStartingIsland && (
             <button
+              disabled={!requireSelectionRSI}
               onClick={toggleStartingIslandList}
               type="button"
             >
@@ -113,6 +117,7 @@ Buttons.propTypes = {
   entrancesListOpen: PropTypes.bool.isRequired,
   onlyProgressLocations: PropTypes.bool.isRequired,
   saveData: PropTypes.string.isRequired,
+  trackerState: PropTypes.instanceOf(TrackerState).isRequired,
   trackSpheres: PropTypes.bool.isRequired,
   toggleColorPicker: PropTypes.func.isRequired,
   toggleDisableLogic: PropTypes.func.isRequired,

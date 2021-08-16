@@ -456,6 +456,7 @@ class Tracker extends React.PureComponent {
             onlyProgressLocations={onlyProgressLocations}
             saveData={saveData}
             startingIslandListOpen={startingIslandListOpen}
+            trackerState={trackerState}
             trackSpheres={trackSpheres}
             toggleColorPicker={this.toggleColorPicker}
             toggleDisableLogic={this.toggleDisableLogic}

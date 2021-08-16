@@ -1,10 +1,8 @@
 import _ from 'lodash';
 
 import Locations from './locations';
-import LogicCalculation from './logic-calculation';
 import LogicHelper from './logic-helper';
 import Macros from './macros';
-import Memoizer from './memoizer';
 
 export default class TrackerState {
   static default() {
@@ -22,7 +20,7 @@ export default class TrackerState {
     );
     newState.itemsForLocations = Locations.mapLocations(() => null);
     newState.locationsChecked = Locations.mapLocations(() => false);
-    newState.startingIsland = "Outset Island";
+    newState.startingIsland = null;
 
     return newState;
   }
@@ -155,11 +153,23 @@ export default class TrackerState {
     return newState;
   }
 
+  setStartingIsland(islandName) {
+    const newState = this._clone({ startingIsland: true });
+
+    Macros.setMacro(`Can Travel to ${islandName}`, 'Nothing');
+    newState.startingIsland = islandName;
+
+    LogicHelper.reset();
+
+    return newState;
+  }
+
   _clone({
     entrances: cloneEntrances,
     items: cloneItems,
     locationsChecked: cloneLocationsChecked,
     itemsForLocations: cloneItemsForLocations,
+    startingIsland: cloneStartingIsland,
   }) {
     const newState = new TrackerState();
 
@@ -175,6 +185,9 @@ export default class TrackerState {
     newState.itemsForLocations = cloneItemsForLocations
       ? _.cloneDeep(this.itemsForLocations)
       : this.itemsForLocations;
+    newState.startingIsland = cloneStartingIsland
+      ? _.clone(this.startingIsland)
+      : this.startingIsland;
 
     return newState;
   }
