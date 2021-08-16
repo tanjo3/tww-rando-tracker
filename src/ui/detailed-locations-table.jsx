@@ -15,7 +15,7 @@ import RequirementsTooltip from './requirements-tooltip';
 import Tooltip from './tooltip';
 
 class DetailedLocationsTable extends React.PureComponent {
-  static NUM_ROWS = 13;
+  static NUM_ROWS = 11;
 
   requirementsTooltip(generalLocation, detailedLocation) {
     const { logic } = this.props;
@@ -65,7 +65,7 @@ class DetailedLocationsTable extends React.PureComponent {
     } = this.props;
 
     let fontSizeClassName = '';
-    if (numColumns === 3) {
+    if (numColumns >= 3) {
       fontSizeClassName = 'font-smallest';
     } else if (numColumns === 2) {
       fontSizeClassName = 'font-small';
