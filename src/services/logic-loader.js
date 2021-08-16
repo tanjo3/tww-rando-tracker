@@ -27,6 +27,6 @@ export default class LogicLoader {
   }
 
   static _logicFileUrl(fileName) {
-    return `https://raw.githubusercontent.com/LagoLunatic/wwrando/${Settings.getVersion()}/logic/${fileName}`;
+    return `https://raw.githubusercontent.com/DualVission/twwrando-dv_im/${Settings.getVersion()}/logic/${fileName}`;
   }
 }

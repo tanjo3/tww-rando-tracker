@@ -22,6 +22,7 @@ export default class LogicTweaks {
     this._updateTingleStatueReward();
     this._updateSunkenTriforceTypes();
     this._applyHasAccessedLocationTweaksForLocations();
+    this._updateDVLocations();
   }
 
   static _updateMacros() {
@@ -30,6 +31,7 @@ export default class LogicTweaks {
     this._updateChartMacros();
     this._updateTriforceMacro();
     this._applyHasAccessedLocationTweaksForMacros();
+    this._updateDVMacros();
   }
 
   static _addDefeatGanondorf() {
@@ -98,6 +100,57 @@ export default class LogicTweaks {
     });
   }
 
+  static _updateDVLocations() {
+    if (Settings.getOptionValue(Permalink.OPTIONS.LOGIC_MOD) === "Glitched \u2013 Lunatic") {
+      // TODO: Read changes from a file rather than hard-coding
+      Locations.setLocation(
+        'Windfall Island',
+        'Kane - Place Six Idols on Gate',
+        Locations.KEYS.TYPES,
+        'Long Sidequest, Expensive Purchase'
+      );
+      Locations.setLocation(
+        'Windfall Island',
+        'Kane - Place Shop Guru Statue on Gate',
+        Locations.KEYS.TYPES,
+        'Long Sidequest, Expensive Purchase'
+      );
+      Locations.setLocation(
+        'Windfall Island', 'Kane - Place Postman Statue on Gate',
+        Locations.KEYS.TYPES,
+        'Long Sidequest',
+        'Expensive Purchase'
+      );
+      Locations.setLocation(
+        'Windfall Island',
+        'Kane - Place Six Flags on Gate',
+        Locations.KEYS.TYPES,
+        'Long Sidequest, Expensive Purchase'
+      );
+      Locations.setLocation(
+        'Mailbox',
+        "Beedle's Silver Membership Reward",
+        Locations.KEYS.TYPES,
+        'Expensive Purchase, Short Sidequest, Misc'
+      );
+      Locations.setLocation(
+        'Mailbox',
+        "Beedle's Gold Membership Reward",
+        Locations.KEYS.TYPES,
+        'Expensive Purchase, Short Sidequest, Misc'
+      );
+    }
+
+    for (let i = 0; i < Settings.getOptionValue(Permalink.OPTIONS.ADDITIONAL_STARTING_MAX); i += 1) {
+      Locations.setLocation(
+        'The Great Sea',
+        `Starting Item ${i + 1}`,
+        Locations.KEYS.NEED,
+        'Nothing'
+      );
+    }
+  }
+
   static _applyHasAccessedLocationTweaksForMacros() {
     const macrosTweaks = HAS_ACCESSED_LOCATION_TWEAKS.macros;
     _.forEach(macrosTweaks, (macroName) => {
@@ -150,5 +203,13 @@ export default class LogicTweaks {
 
   static _updateTriforceMacro() {
     Macros.setMacro('All 8 Triforce Shards', 'Triforce Shard x8');
+  }
+
+  static _updateDVMacros() {
+    Macros.setMacro('Can Access Hyrule', 'Triforce Shard x8');
+
+    if (!Settings.getOptionValue(Permalink.OPTIONS.RANDOMIZE_STARTING_ISLAND)) {
+      Macros.setMacro('Can Travel to Outset Island', 'Nothing');
+    }
   }
 }

@@ -31,6 +31,7 @@ class Tracker extends React.PureComponent {
       openedLocation: null,
       openedLocationIsDungeon: null,
       singleColorBackground: false,
+      startingIslandListOpen: false,
       trackSpheres: false,
     };
 
@@ -45,12 +46,14 @@ class Tracker extends React.PureComponent {
     this.toggleLocationChecked = this.toggleLocationChecked.bind(this);
     this.toggleOnlyProgressLocations = this.toggleOnlyProgressLocations.bind(this);
     this.toggleSingleColorBackground = this.toggleSingleColorBackground.bind(this);
+    this.toggleStartingIslandList = this.toggleStartingIslandList.bind(this);
     this.toggleTrackSpheres = this.toggleTrackSpheres.bind(this);
     this.unsetExit = this.unsetExit.bind(this);
     this.unsetLastLocation = this.unsetLastLocation.bind(this);
     this.updateEntranceForExit = this.updateEntranceForExit.bind(this);
     this.updateOpenedExit = this.updateOpenedExit.bind(this);
     this.updateOpenedLocation = this.updateOpenedLocation.bind(this);
+    this.updateStartingIsland = this.updateStartingIsland.bind(this);
   }
 
   async initialize() {
@@ -210,6 +213,7 @@ class Tracker extends React.PureComponent {
       openedExit: null,
       openedLocation: null,
       openedLocationIsDungeon: null,
+      startingIslandListOpen: false,
     });
   }
 
@@ -219,6 +223,7 @@ class Tracker extends React.PureComponent {
       openedExit: dungeonOrCaveName,
       openedLocation: null,
       openedLocationIsDungeon: null,
+      startingIslandListOpen: false,
     });
   }
 
@@ -251,7 +256,17 @@ class Tracker extends React.PureComponent {
       openedExit: null,
       openedLocation: locationName,
       openedLocationIsDungeon: isDungeon,
+      startingIslandListOpen: false,
     });
+  }
+
+  updateStartingIsland(islandName) {
+    const { trackerState } = this.state;
+
+    const newTrackerState = trackerState.setStartingIsland(islandName);
+
+    this.updateTrackerState(newTrackerState);
+    this.clearOpenedMenus();
   }
 
   toggleEntrancesList() {
@@ -262,6 +277,7 @@ class Tracker extends React.PureComponent {
       openedExit: null,
       openedLocation: null,
       openedLocationIsDungeon: null,
+      startingIslandListOpen: false,
     });
   }
 
@@ -278,6 +294,18 @@ class Tracker extends React.PureComponent {
 
     this.setState({
       singleColorBackground: !singleColorBackground,
+    });
+  }
+
+  toggleStartingIslandList() {
+    const { startingIslandListOpen } = this.state;
+
+    this.setState({
+      entrancesListOpen: false,
+      openedExit: null,
+      openedLocation: null,
+      openedLocationIsDungeon: null,
+      startingIslandListOpen: !startingIslandListOpen,
     });
   }
 
@@ -307,6 +335,7 @@ class Tracker extends React.PureComponent {
       saveData,
       singleColorBackground,
       spheres,
+      startingIslandListOpen,
       trackSpheres,
       trackerState,
     } = this.state;
@@ -343,6 +372,7 @@ class Tracker extends React.PureComponent {
               openedLocationIsDungeon={openedLocationIsDungeon}
               singleColorBackground={singleColorBackground}
               spheres={spheres}
+              startingIslandListOpen={startingIslandListOpen}
               toggleLocationChecked={this.toggleLocationChecked}
               trackerState={trackerState}
               trackSpheres={trackSpheres}
@@ -350,6 +380,7 @@ class Tracker extends React.PureComponent {
               updateEntranceForExit={this.updateEntranceForExit}
               updateOpenedExit={this.updateOpenedExit}
               updateOpenedLocation={this.updateOpenedLocation}
+              updateStartingIsland={this.updateStartingIsland}
             />
             <Statistics
               disableLogic={disableLogic}
@@ -371,11 +402,13 @@ class Tracker extends React.PureComponent {
             onlyProgressLocations={onlyProgressLocations}
             saveData={saveData}
             singleColorBackground={singleColorBackground}
+            startingIslandListOpen={startingIslandListOpen}
             trackSpheres={trackSpheres}
             toggleDisableLogic={this.toggleDisableLogic}
             toggleEntrancesList={this.toggleEntrancesList}
             toggleOnlyProgressLocations={this.toggleOnlyProgressLocations}
             toggleSingleColorBackground={this.toggleSingleColorBackground}
+            toggleStartingIslandList={this.toggleStartingIslandList}
             toggleTrackSpheres={this.toggleTrackSpheres}
           />
         </div>

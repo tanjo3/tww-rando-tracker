@@ -1,7 +1,10 @@
 import _ from 'lodash';
 
 import Locations from './locations';
+import LogicCalculation from './logic-calculation';
 import LogicHelper from './logic-helper';
+import Macros from './macros';
+import Memoizer from './memoizer';
 
 export default class TrackerState {
   static default() {
@@ -19,6 +22,7 @@ export default class TrackerState {
     );
     newState.itemsForLocations = Locations.mapLocations(() => null);
     newState.locationsChecked = Locations.mapLocations(() => false);
+    newState.startingIsland = "Outset Island";
 
     return newState;
   }
@@ -28,6 +32,7 @@ export default class TrackerState {
     items,
     itemsForLocations,
     locationsChecked,
+    startingIsland,
   }) {
     const newState = new TrackerState();
 
@@ -35,6 +40,7 @@ export default class TrackerState {
     newState.items = items;
     newState.itemsForLocations = itemsForLocations;
     newState.locationsChecked = locationsChecked;
+    newState.startingIsland = startingIsland;
 
     return newState;
   }
@@ -45,6 +51,7 @@ export default class TrackerState {
       items: this.items,
       itemsForLocations: this.itemsForLocations,
       locationsChecked: this.locationsChecked,
+      startingIsland: this.startingIsland,
     };
   }
 
@@ -131,6 +138,32 @@ export default class TrackerState {
     return newState;
   }
 
+  setStartingIsland(islandName) {
+    const newState = this._clone();
+    newState.startingIsland = islandName;
+
+    // TODO:
+    // Macros.setMacro(`Can Travel to ${islandName}`, 'Nothing');
+    // console.log(Macros.macros)
+
+    // Memoizer.invalidate([
+    //   LogicCalculation.isLocationAvailable,
+    //   LogicCalculation._itemsRemainingForRequirement,
+    // ]);
+
+    // const rawRequirements = LogicHelper._rawRequirementsForLocation('Outset Island', "Underneath Link's House");
+    // console.log( rawRequirements );
+    // console.log( LogicHelper._simplifiedItemRequirements(rawRequirements) );
+
+    // const requirements = LogicHelper.requirementsForLocation('Outset Island', "Underneath Link's House");
+    // console.log( requirements );
+
+    // const logic = new LogicCalculation(newState);
+    // console.log( logic.isLocationAvailable('Outset Island', "Underneath Link's House") );
+
+    return newState;
+  }
+
   _clone() {
     const newState = new TrackerState();
 
@@ -138,6 +171,7 @@ export default class TrackerState {
     newState.items = _.clone(this.items);
     newState.locationsChecked = _.cloneDeep(this.locationsChecked);
     newState.itemsForLocations = _.cloneDeep(this.itemsForLocations);
+    newState.startingIsland = _.clone(this.startingIsland);
 
     return newState;
   }

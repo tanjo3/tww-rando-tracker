@@ -280,7 +280,7 @@ export default class LogicCalculation {
       {},
     );
 
-    if (!Settings.getOptionValue(Permalink.OPTIONS.KEYLUNACY)) {
+    if (Settings.getOptionValue(Permalink.OPTIONS.KEYMODE) === "Standard") {
       _.forEach(LogicHelper.mainDungeons(), (dungeonName) => {
         const {
           guaranteedSmallKeys,

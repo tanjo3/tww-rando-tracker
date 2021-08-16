@@ -24,11 +24,13 @@ class Buttons extends React.PureComponent {
       entrancesListOpen,
       onlyProgressLocations,
       singleColorBackground,
+      startingIslandListOpen,
       trackSpheres,
       toggleDisableLogic,
       toggleEntrancesList,
       toggleOnlyProgressLocations,
       toggleSingleColorBackground,
+      toggleStartingIslandList,
       toggleTrackSpheres,
     } = this.props;
 
@@ -36,6 +38,11 @@ class Buttons extends React.PureComponent {
       ? 'Close Entrances'
       : 'View Entrances';
     const isRandomEntrances = LogicHelper.isRandomEntrances();
+
+    const startingIslandListText = startingIslandListOpen
+      ? 'Cancel'
+      : 'Choose Starting Island';
+    const isRandomStartingIsland = LogicHelper.isRandomStartingIsland();
 
     return (
       <div className="buttons">
@@ -59,6 +66,16 @@ class Buttons extends React.PureComponent {
               type="button"
             >
               {entrancesListText}
+            </button>
+          )
+        }
+        {
+          isRandomStartingIsland && (
+            <button
+              onClick={toggleStartingIslandList}
+              type="button"
+            >
+              {startingIslandListText}
             </button>
           )
         }
@@ -94,11 +111,13 @@ Buttons.propTypes = {
   onlyProgressLocations: PropTypes.bool.isRequired,
   saveData: PropTypes.string.isRequired,
   singleColorBackground: PropTypes.bool.isRequired,
+  startingIslandListOpen: PropTypes.bool.isRequired,
   trackSpheres: PropTypes.bool.isRequired,
   toggleDisableLogic: PropTypes.func.isRequired,
   toggleEntrancesList: PropTypes.func.isRequired,
   toggleOnlyProgressLocations: PropTypes.func.isRequired,
   toggleSingleColorBackground: PropTypes.func.isRequired,
+  toggleStartingIslandList: PropTypes.func.isRequired,
   toggleTrackSpheres: PropTypes.func.isRequired,
 };
 

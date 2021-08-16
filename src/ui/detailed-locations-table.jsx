@@ -169,7 +169,7 @@ class DetailedLocationsTable extends React.PureComponent {
 
     let clearAllElement;
     if (
-      Settings.getOptionValue(Permalink.OPTIONS.RACE_MODE)
+      Settings.getOptionValue(Permalink.OPTIONS.RACE_MODE) === "Race"
       && openedLocationIsDungeon
       && LogicHelper.isRaceModeDungeon(openedLocation)
     ) {

@@ -125,31 +125,39 @@ export default class Launcher extends React.PureComponent {
     return (
       <OptionsTable
         title="Progress Item Locations"
-        numColumns={3}
+        numColumns={4}
         options={[
           this.toggleInput({
             labelText: 'Dungeons',
             optionName: Permalink.OPTIONS.PROGRESSION_DUNGEONS,
           }),
           this.toggleInput({
-            labelText: 'Tingle Chests',
-            optionName: Permalink.OPTIONS.PROGRESSION_TINGLE_CHESTS,
-          }),
-          this.toggleInput({
-            labelText: 'Mail',
-            optionName: Permalink.OPTIONS.PROGRESSION_MAIL,
-          }),
-          this.toggleInput({
             labelText: 'Puzzle Secret Caves',
             optionName: Permalink.OPTIONS.PROGRESSION_PUZZLE_SECRET_CAVES,
+          }),
+          this.toggleInput({
+            labelText: 'Mixed Secret Caves',
+            optionName: Permalink.OPTIONS.PROGRESSION_MIXED_SECRET_CAVES,
           }),
           this.toggleInput({
             labelText: 'Combat Secret Caves',
             optionName: Permalink.OPTIONS.PROGRESSION_COMBAT_SECRET_CAVES,
           }),
           this.toggleInput({
-            labelText: 'Savage Labyrinth',
-            optionName: Permalink.OPTIONS.PROGRESSION_SAVAGE_LABYRINTH,
+            labelText: 'Odd Dungeon Checks',
+            optionName: Permalink.OPTIONS.PROGRESSION_TINGLE_CHESTS,
+          }),
+          this.toggleInput({
+            labelText: 'Great Fairies',
+            optionName: Permalink.OPTIONS.PROGRESSION_GREAT_FAIRIES,
+          }),
+          this.toggleInput({
+            labelText: 'Island Puzzles',
+            optionName: Permalink.OPTIONS.PROGRESSION_ISLAND_PUZZLES,
+          }),
+          this.toggleInput({
+            labelText: 'Long Combat Trials',
+            optionName: Permalink.OPTIONS.PROGRESSION_LONG_COMBAT_TRIALS,
           }),
           this.toggleInput({
             labelText: 'Short Sidequests',
@@ -164,8 +172,32 @@ export default class Launcher extends React.PureComponent {
             optionName: Permalink.OPTIONS.PROGRESSION_SPOILS_TRADING,
           }),
           this.toggleInput({
-            labelText: 'Great Fairies',
-            optionName: Permalink.OPTIONS.PROGRESSION_GREAT_FAIRIES,
+            labelText: 'Lookout Platforms and Rafts',
+            optionName: Permalink.OPTIONS.PROGRESSION_PLATFORMS_RAFTS,
+          }),
+          this.toggleInput({
+            labelText: 'Short Minigames',
+            optionName: Permalink.OPTIONS.PROGRESSION_SHORT_MINIGAMES,
+          }),
+          this.toggleInput({
+            labelText: 'Long Minigames',
+            optionName: Permalink.OPTIONS.PROGRESSION_LONG_MINIGAMES,
+          }),
+          this.toggleInput({
+            labelText: 'Expensive Purchases',
+            optionName: Permalink.OPTIONS.PROGRESSION_EXPENSIVE_PURCHASES,
+          }),
+          this.toggleInput({
+            labelText: 'Big Octos and Gunboats',
+            optionName: Permalink.OPTIONS.PROGRESSION_BIG_OCTOS_GUNBOATS,
+          }),
+          this.toggleInput({
+            labelText: 'Submarines',
+            optionName: Permalink.OPTIONS.PROGRESSION_SUBMARINES,
+          }),
+          this.toggleInput({
+            labelText: 'Eye Reef Chests',
+            optionName: Permalink.OPTIONS.PROGRESSION_EYE_REEF_CHESTS,
           }),
           this.toggleInput({
             labelText: 'Free Gifts',
@@ -176,44 +208,12 @@ export default class Launcher extends React.PureComponent {
             optionName: Permalink.OPTIONS.PROGRESSION_MISC,
           }),
           this.toggleInput({
-            labelText: 'Minigames',
-            optionName: Permalink.OPTIONS.PROGRESSION_MINIGAMES,
-          }),
-          this.toggleInput({
-            labelText: 'Battlesquid Minigame',
-            optionName: Permalink.OPTIONS.PROGRESSION_BATTLESQUID,
-          }),
-          this.toggleInput({
-            labelText: 'Expensive Purchases',
-            optionName: Permalink.OPTIONS.PROGRESSION_EXPENSIVE_PURCHASES,
-          }),
-          this.toggleInput({
-            labelText: 'Island Puzzles',
-            optionName: Permalink.OPTIONS.PROGRESSION_ISLAND_PUZZLES,
-          }),
-          this.toggleInput({
-            labelText: 'Lookout Platforms and Rafts',
-            optionName: Permalink.OPTIONS.PROGRESSION_PLATFORMS_RAFTS,
-          }),
-          this.toggleInput({
-            labelText: 'Submarines',
-            optionName: Permalink.OPTIONS.PROGRESSION_SUBMARINES,
-          }),
-          this.toggleInput({
-            labelText: 'Big Octos and Gunboats',
-            optionName: Permalink.OPTIONS.PROGRESSION_BIG_OCTOS_GUNBOATS,
-          }),
-          this.toggleInput({
             labelText: 'Sunken Treasure (From Triforce Charts)',
             optionName: Permalink.OPTIONS.PROGRESSION_TRIFORCE_CHARTS,
           }),
           this.toggleInput({
             labelText: 'Sunken Treasure (From Treasure Charts)',
             optionName: Permalink.OPTIONS.PROGRESSION_TREASURE_CHARTS,
-          }),
-          this.toggleInput({
-            labelText: 'Eye Reef Chests',
-            optionName: Permalink.OPTIONS.PROGRESSION_EYE_REEF_CHESTS,
           }),
         ]}
       />
@@ -230,16 +230,16 @@ export default class Launcher extends React.PureComponent {
             labelText: 'Sword Mode',
             optionName: Permalink.OPTIONS.SWORD_MODE,
           }),
-          this.toggleInput({
-            labelText: 'Key-Lunacy',
-            optionName: Permalink.OPTIONS.KEYLUNACY,
+          this.dropdownInput({
+            labelText: 'Key Placement',
+            optionName: Permalink.OPTIONS.KEYMODE,
           }),
           this.dropdownInput({
-            labelText: 'Triforce Shards to Start With',
+            labelText: 'Starting Triforce Shards',
             optionName: Permalink.OPTIONS.NUM_STARTING_TRIFORCE_SHARDS,
           }),
-          this.toggleInput({
-            labelText: 'Race Mode',
+          this.dropdownInput({
+            labelText: 'Dungeon Mode',
             optionName: Permalink.OPTIONS.RACE_MODE,
           }),
           this.dropdownInput({
@@ -250,17 +250,26 @@ export default class Launcher extends React.PureComponent {
             labelText: 'Randomize Charts',
             optionName: Permalink.OPTIONS.RANDOMIZE_CHARTS,
           }),
-        ]}
-      />
-    );
-  }
-
-  convenienceTweaksTable() {
-    return (
-      <OptionsTable
-        title="Convenience Tweaks"
-        numColumns={2}
-        options={[
+          this.dropdownInput({
+            labelText: 'Logic Type',
+            optionName: Permalink.OPTIONS.LOGIC_MOD,
+          }),
+          // this.toggleInput({
+          //   labelText: 'Randomize Starting Island',
+          //   optionName: Permalink.OPTIONS.RANDOMIZE_STARTING_ISLAND,
+          // }),
+          this.dropdownInput({
+            labelText: 'Item Pool',
+            optionName: Permalink.OPTIONS.CONVENIENCE_OPTION,
+          }),
+          this.toggleInput({
+            labelText: 'Use Swift Sail',
+            optionName: Permalink.OPTIONS.SWIFT_SAIL,
+          }),
+          this.dropdownInput({
+            labelText: 'Additional Starting Items (Max)',
+            optionName: Permalink.OPTIONS.ADDITIONAL_STARTING_MAX,
+          }),
           this.toggleInput({
             labelText: 'Skip Boss Rematches',
             optionName: Permalink.OPTIONS.SKIP_REMATCH_BOSSES,
@@ -337,12 +346,11 @@ export default class Launcher extends React.PureComponent {
             {this.permalinkContainer()}
             {this.progressItemLocationsTable()}
             {this.additionalRandomizationOptionsTable()}
-            {this.convenienceTweaksTable()}
             {this.launchButtonContainer()}
           </div>
           <div className="attribution">
-            <span>Maintained by wooferzfg • Source Code on </span>
-            <a href="https://github.com/wooferzfg/tww-rando-tracker">GitHub</a>
+            <span>Maintained by wooferzfg • dv_im changes made by tanjo3 • Source Code on </span>
+            <a href="https://github.com/tanjo3/tww-rando-tracker/tree/dvim-tracker">GitHub</a>
             <span> • Original Tracker by BigDunka</span>
           </div>
         </div>

@@ -204,6 +204,10 @@ export default class LogicHelper {
     );
   }
 
+  static isRandomStartingIsland() {
+    return Settings.getOptionValue(Permalink.OPTIONS.RANDOMIZE_STARTING_ISLAND);
+  }
+
   static allRandomEntrances() {
     return _.concat(
       this.isRandomDungeonEntrances() ? this.mainDungeons() : [],
@@ -571,9 +575,7 @@ export default class LogicHelper {
       [this.ITEMS.WINDS_REQUIEM]: 1,
       [this.ITEMS.BALLAD_OF_GALES]: 1,
       [this.ITEMS.SONG_OF_PASSING]: 1,
-      [this.ITEMS.TRIFORCE_SHARD]: Settings.getOptionValue(
-        Permalink.OPTIONS.NUM_STARTING_TRIFORCE_SHARDS,
-      ),
+      [this.ITEMS.TRIFORCE_SHARD]: Settings.getNumStartingShards(),
     };
     this.impossibleItems = {};
 

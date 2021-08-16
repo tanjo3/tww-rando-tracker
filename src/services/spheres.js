@@ -3,6 +3,8 @@ import _ from 'lodash';
 import Locations from './locations';
 import LogicCalculation from './logic-calculation';
 import LogicHelper from './logic-helper';
+import Permalink from './permalink';
+import Settings from './settings';
 import TrackerState from './tracker-state';
 
 export default class Spheres {
@@ -27,6 +29,13 @@ export default class Spheres {
       (accumulator, entrance) => _.set(accumulator, entrance, false),
       {},
     );
+
+    this.currentSphere = -1;
+    const logic = new LogicCalculation(this.temporaryState);
+    for (let i = 0; i < Settings.getOptionValue(Permalink.OPTIONS.ADDITIONAL_STARTING_MAX); i += 1) {
+      this._updateItemsForLocation('The Great Sea', `Starting Item ${i + 1}`, logic);
+    }
+
     this.anyItemsAdded = true;
     this.currentSphere = 0;
 

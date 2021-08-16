@@ -12,6 +12,7 @@ import EntrancesList from './entrances-list';
 import ExtraLocationsTable from './extra-locations-table';
 import MapInfo from './map-info';
 import SeaChart from './sea-chart';
+import StartingIslandSelection from './starting-island-selection';
 
 class LocationsTable extends React.PureComponent {
   constructor(props) {
@@ -71,6 +72,7 @@ class LocationsTable extends React.PureComponent {
       openedLocation,
       openedLocationIsDungeon,
       spheres,
+      startingIslandListOpen,
       toggleLocationChecked,
       trackerState,
       trackSpheres,
@@ -78,6 +80,7 @@ class LocationsTable extends React.PureComponent {
       updateEntranceForExit,
       updateOpenedExit,
       updateOpenedLocation,
+      updateStartingIsland,
     } = this.props;
 
     const {
@@ -95,6 +98,13 @@ class LocationsTable extends React.PureComponent {
           disableLogic={disableLogic}
           logic={logic}
           trackerState={trackerState}
+        />
+      );
+    } else if (startingIslandListOpen) {
+      chartElement = (
+        <StartingIslandSelection
+          clearOpenedMenus={clearOpenedMenus}
+          updateStartingIsland={updateStartingIsland}
         />
       );
     } else if (!_.isNil(openedExit)) {
@@ -221,6 +231,7 @@ LocationsTable.propTypes = {
   openedLocationIsDungeon: PropTypes.bool,
   singleColorBackground: PropTypes.bool.isRequired,
   spheres: PropTypes.instanceOf(Spheres).isRequired,
+  startingIslandListOpen: PropTypes.bool.isRequired,
   toggleLocationChecked: PropTypes.func.isRequired,
   trackerState: PropTypes.instanceOf(TrackerState).isRequired,
   trackSpheres: PropTypes.bool.isRequired,
@@ -228,6 +239,7 @@ LocationsTable.propTypes = {
   updateEntranceForExit: PropTypes.func.isRequired,
   updateOpenedExit: PropTypes.func.isRequired,
   updateOpenedLocation: PropTypes.func.isRequired,
+  updateStartingIsland: PropTypes.func.isRequired,
 };
 
 export default LocationsTable;
