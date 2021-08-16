@@ -158,23 +158,9 @@ describe('TrackerState', () => {
 
   describe('incrementItem', () => {
     let state;
-    let initialEntrances;
-    let initialLocationsChecked;
 
     beforeEach(() => {
-      initialEntrances = {
-        'Needle Rock Isle Secret Cave': 'Dragon Roost Cavern',
-      };
-      initialLocationsChecked = {
-        'Dragon Roost Cavern': {
-          "Bird's Nest": true,
-        },
-      };
-
       state = new TrackerState();
-
-      state.entrances = _.clone(initialEntrances);
-      state.locationsChecked = _.cloneDeep(initialLocationsChecked);
     });
 
     describe('when the item is already at max quantity', () => {
@@ -208,34 +194,13 @@ describe('TrackerState', () => {
         expect(newState.items['Deku Leaf']).toEqual(1);
       });
     });
-
-    test('keeps the other values unmodified', () => {
-      const newState = state.incrementItem('Deku Leaf');
-
-      expect(newState.entrances).toEqual(initialEntrances);
-      expect(newState.locationsChecked).toEqual(initialLocationsChecked);
-    });
   });
 
   describe('decrementItem', () => {
     let state;
-    let initialEntrances;
-    let initialLocationsChecked;
 
     beforeEach(() => {
-      initialEntrances = {
-        'Needle Rock Isle Secret Cave': 'Dragon Roost Cavern',
-      };
-      initialLocationsChecked = {
-        'Dragon Roost Cavern': {
-          "Bird's Nest": true,
-        },
-      };
-
       state = new TrackerState();
-
-      state.entrances = _.clone(initialEntrances);
-      state.locationsChecked = _.cloneDeep(initialLocationsChecked);
     });
 
     describe('when the item is already at min quantity', () => {
@@ -268,13 +233,6 @@ describe('TrackerState', () => {
 
         expect(newState.items['Deku Leaf']).toEqual(0);
       });
-    });
-
-    test('keeps the other values unmodified', () => {
-      const newState = state.decrementItem('Deku Leaf');
-
-      expect(newState.entrances).toEqual(initialEntrances);
-      expect(newState.locationsChecked).toEqual(initialLocationsChecked);
     });
   });
 
@@ -314,27 +272,14 @@ describe('TrackerState', () => {
 
   describe('setEntranceForExit', () => {
     let state;
-    let initialItems;
-    let initialLocationsChecked;
 
     beforeEach(() => {
-      initialItems = {
-        'Deku Leaf': 2,
-      };
       const initialEntrances = {
         'Needle Rock Isle Secret Cave': 'Dragon Roost Cavern',
       };
-      initialLocationsChecked = {
-        'Dragon Roost Cavern': {
-          "Bird's Nest": true,
-        },
-      };
 
       state = new TrackerState();
-
-      state.items = _.clone(initialItems);
       state.entrances = _.clone(initialEntrances);
-      state.locationsChecked = _.cloneDeep(initialLocationsChecked);
     });
 
     test('returns a new state with the entrance value modified', () => {
@@ -342,39 +287,19 @@ describe('TrackerState', () => {
 
       expect(newState.entrances['Needle Rock Isle Secret Cave']).toEqual('Forbidden Woods');
     });
-
-    test('keeps the other values unmodified', () => {
-      const newState = state.setEntranceForExit('Needle Rock Isle Secret Cave', 'Forbidden Woods');
-
-      expect(newState.items).toEqual(initialItems);
-      expect(newState.locationsChecked).toEqual(initialLocationsChecked);
-    });
   });
 
   describe('unsetEntranceForExit', () => {
     let state;
-    let initialItems;
-    let initialLocationsChecked;
 
     beforeEach(() => {
-      initialItems = {
-        'Deku Leaf': 2,
-      };
       const initialEntrances = {
         'Needle Rock Isle Secret Cave': 'Dragon Roost Cavern',
         'Forbidden Woods': 'Tower of the Gods',
       };
-      initialLocationsChecked = {
-        'Dragon Roost Cavern': {
-          "Bird's Nest": true,
-        },
-      };
 
       state = new TrackerState();
-
-      state.items = _.clone(initialItems);
       state.entrances = _.clone(initialEntrances);
-      state.locationsChecked = _.cloneDeep(initialLocationsChecked);
     });
 
     test('returns a new state with the entrance value unset', () => {
@@ -383,13 +308,6 @@ describe('TrackerState', () => {
       expect(newState.entrances).toEqual({
         'Forbidden Woods': 'Tower of the Gods',
       });
-    });
-
-    test('keeps the other values unmodified', () => {
-      const newState = state.unsetEntranceForExit('Needle Rock Isle Secret Cave');
-
-      expect(newState.items).toEqual(initialItems);
-      expect(newState.locationsChecked).toEqual(initialLocationsChecked);
     });
   });
 
@@ -442,16 +360,8 @@ describe('TrackerState', () => {
 
   describe('toggleLocationChecked', () => {
     let state;
-    let initialItems;
-    let initialEntrances;
 
     beforeEach(() => {
-      initialItems = {
-        'Deku Leaf': 2,
-      };
-      initialEntrances = {
-        'Needle Rock Isle Secret Cave': 'Dragon Roost Cavern',
-      };
       const initialLocationsChecked = {
         'Dragon Roost Cavern': {
           "Bird's Nest": true,
@@ -459,9 +369,6 @@ describe('TrackerState', () => {
       };
 
       state = new TrackerState();
-
-      state.items = _.clone(initialItems);
-      state.entrances = _.clone(initialEntrances);
       state.locationsChecked = _.cloneDeep(initialLocationsChecked);
     });
 
@@ -500,12 +407,39 @@ describe('TrackerState', () => {
         expect(newIsLocationChecked).toEqual(true);
       });
     });
+  });
 
-    test('keeps the other values unmodified', () => {
-      const newState = state.toggleLocationChecked('Dragon Roost Cavern', "Bird's Nest");
+  describe('getLocationsForItem', () => {
+    let state;
 
-      expect(newState.items).toEqual(initialItems);
-      expect(newState.entrances).toEqual(initialEntrances);
+    beforeEach(() => {
+      state = new TrackerState();
+      state.itemsForLocations = {
+        'Windfall Island': {
+          'Maggie - Free Item': 'Progressive Sword',
+          'House of Wealth Chest': 'Progressive Sword',
+          'Tott - Play Rhythm': 'Bombs',
+        },
+        'Dragon Roost Cavern': {
+          'First Room': 'Boomerang',
+          "Bird's Nest": 'Progressive Sword',
+        },
+      };
+    });
+
+    test('returns the location for the item', () => {
+      const location = state.getLocationsForItem('Progressive Sword');
+
+      expect(location).toEqual([{
+        generalLocation: 'Windfall Island',
+        detailedLocation: 'Maggie - Free Item',
+      }, {
+        generalLocation: 'Windfall Island',
+        detailedLocation: 'House of Wealth Chest',
+      }, {
+        generalLocation: 'Dragon Roost Cavern',
+        detailedLocation: "Bird's Nest",
+      }]);
     });
   });
 

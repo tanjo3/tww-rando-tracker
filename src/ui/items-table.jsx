@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 
 import LogicHelper from '../services/logic-helper';
+import Spheres from '../services/spheres';
 import TrackerState from '../services/tracker-state';
 
 import Images from './images';
@@ -40,19 +41,27 @@ class ItemsTable extends React.PureComponent {
     const itemInfoText = LogicHelper.prettyNameForItem(selectedItem, itemCount);
 
     return (
-      <span className="item-info">{itemInfoText}</span>
+      <span className="item-info">
+        {itemInfoText}
+      </span>
     );
   }
 
-  item(itemName) {
+  item(itemName, showLocationTooltip = true) {
     const {
       decrementItem,
       incrementItem,
+      spheres,
       trackerState,
+      trackSpheres,
     } = this.props;
 
     const itemCount = trackerState.getItemValue(itemName);
     const itemImages = _.get(Images.IMAGES, ['ITEMS', itemName]);
+    let locations = [];
+    if (showLocationTooltip && trackSpheres) {
+      locations = trackerState.getLocationsForItem(itemName);
+    }
 
     return (
       <Item
@@ -62,32 +71,40 @@ class ItemsTable extends React.PureComponent {
         incrementItem={incrementItem}
         itemCount={itemCount}
         itemName={itemName}
+        locations={locations}
         setSelectedItem={this.setSelectedItem}
+        spheres={spheres}
       />
     );
   }
 
   song(songName) {
-    const { trackerState } = this.props;
+    const { trackerState, trackSpheres, spheres } = this.props;
 
     const songCount = trackerState.getItemValue(songName);
+    const locations = trackSpheres ? trackerState.getLocationsForItem(songName) : [];
 
     return (
       <SongNotes
+        locations={locations}
         songCount={songCount}
         songName={songName}
+        spheres={spheres}
       >
-        {this.item(songName)}
+        {this.item(songName, false)}
       </SongNotes>
     );
   }
 
   render() {
-    const { singleColorBackground } = this.props;
+    const { backgroundColor } = this.props;
 
     return (
-      <div className={`item-tracker ${singleColorBackground ? 'single-color' : ''}`}>
-        <div className="item-tracker-background">
+      <div className={`item-tracker ${backgroundColor ? 'single-color' : ''}`}>
+        <div
+          className="item-tracker-background"
+          style={{ backgroundColor }}
+        >
           <img src={Images.IMAGES.ITEMS_TABLE_BACKGROUND} alt="" />
         </div>
         <div className="item-tracker-items">
@@ -182,11 +199,17 @@ class ItemsTable extends React.PureComponent {
   }
 }
 
+ItemsTable.defaultProps = {
+  backgroundColor: null,
+};
+
 ItemsTable.propTypes = {
+  backgroundColor: PropTypes.string,
   decrementItem: PropTypes.func.isRequired,
   incrementItem: PropTypes.func.isRequired,
-  singleColorBackground: PropTypes.bool.isRequired,
+  spheres: PropTypes.instanceOf(Spheres).isRequired,
   trackerState: PropTypes.instanceOf(TrackerState).isRequired,
+  trackSpheres: PropTypes.bool.isRequired,
 };
 
 export default ItemsTable;
