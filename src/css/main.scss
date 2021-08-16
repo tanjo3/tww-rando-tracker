@@ -264,7 +264,6 @@ button:hover:enabled {
   &.single-color {
     .item-tracker-background {
       background-image: none;
-      background-color: #69891c;
 
       img {
         visibility: hidden;
@@ -382,8 +381,15 @@ button:hover:enabled {
 }
 
 .song-notes {
+  display: flex;
+  justify-content: center;
+
   img:not(:last-child) {
     margin-right: 3px;
+  }
+
+  & + .item-location {
+    margin-top: 10px;
   }
 }
 
@@ -498,7 +504,7 @@ button:hover:enabled {
         padding-bottom: 0;
       }
     }
-  
+
     .zoom-map-background,
     .zoom-map-cover {
       position: absolute;
@@ -506,7 +512,7 @@ button:hover:enabled {
       height: 100%;
       pointer-events: none;
     }
-  
+
     .zoom-map-background {
       z-index: -2;
 
@@ -517,7 +523,7 @@ button:hover:enabled {
         object-position: 50% 50%;
       }
     }
-  
+
     .zoom-map-cover {
       z-index: -1;
       background-color: rgba(216, 186, 106, 0.7);
@@ -540,7 +546,7 @@ button:hover:enabled {
       &.font-small {
         font-size: 13px;
       }
-      
+
       &.font-smallest {
         font-size: 10px;
       }
@@ -588,10 +594,6 @@ button:hover:enabled {
   margin-right: 8px;
   margin-bottom: 8px;
 
-  &.single-color {
-    background-color: rgba(160, 160, 160, 1);
-  }
-
   .extra-location {
     width: 120px;
     float: left;
@@ -608,7 +610,7 @@ button:hover:enabled {
     justify-content: center;
     height: 24px;
   }
-  
+
   .dungeon-item {
     width: 24px;
     height: 24px;
@@ -620,12 +622,12 @@ button:hover:enabled {
       outline-style: none;
     }
   }
-  
+
   .extra-location-chests {
     font-size: 16px;
     text-align: center;
   }
-  
+
   .dungeon-icon {
     display: flex;
     justify-content: center;
@@ -643,10 +645,6 @@ button:hover:enabled {
   white-space: normal;
   color: #bbbbbb;
   font-size: 18px;
-
-  &.single-color {
-    background-color: rgba(80, 80, 80, 1);
-  }
 
   table {
     border-spacing: 0;
@@ -695,7 +693,7 @@ button:hover:enabled {
       font-weight: bold;
       height: 20px;
     }
-  
+
     .last-item {
       height: 20px;
 
@@ -724,5 +722,67 @@ button:hover:enabled {
     margin: 0 5px 0 0;
     vertical-align: middle;
     pointer-events: none;
+  }
+}
+
+.color-picker-window {
+  position: fixed;
+  background-color: white;
+  padding: 10px;
+  width: 400px;
+  user-select: none;
+
+  .close-color-picker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+  }
+
+  .color-picker-wrapper {
+    position: absolute;
+    z-index: 10;
+  }
+
+  .color-picker-top-row {
+    display: flex;
+  }
+
+  .color-picker-title {
+    font-size: 20px;
+  }
+
+  .color-picker-row {
+    display: flex;
+    height: 35px;
+    align-items: center;
+  }
+
+  .color-picker-label {
+    cursor: pointer;
+    width: 360px;
+    margin-left: 5px;
+  }
+
+  .color-picker-checkbox {
+    cursor: pointer;
+  }
+
+  .color-picker-button {
+    border: 2px solid white;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,.1);
+    cursor: pointer;
+    box-sizing: border-box;
+    width: 30px;
+    height: 30px;
+  }
+
+  .close-button {
+    cursor: pointer;
+    text-align: right;
+    height: 25px;
+    flex-grow: 1;
   }
 }

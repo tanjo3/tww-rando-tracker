@@ -60,7 +60,7 @@ export default class TrackerState {
   }
 
   incrementItem(itemName) {
-    const newState = this._clone();
+    const newState = this._clone({ items: true });
 
     let newItemCount = 1 + this.getItemValue(itemName);
     const maxItemCount = LogicHelper.maxItemCount(itemName);
@@ -73,7 +73,7 @@ export default class TrackerState {
   }
 
   decrementItem(itemName) {
-    const newState = this._clone();
+    const newState = this._clone({ items: true });
 
     let newItemCount = this.getItemValue(itemName) - 1;
     const minItemCount = LogicHelper.startingItemCount(itemName);
@@ -94,13 +94,13 @@ export default class TrackerState {
   }
 
   setEntranceForExit(exitName, entranceName) {
-    const newState = this._clone();
+    const newState = this._clone({ entrances: true });
     _.set(newState.entrances, exitName, entranceName);
     return newState;
   }
 
   unsetEntranceForExit(dungeonOrCaveName) {
-    const newState = this._clone();
+    const newState = this._clone({ entrances: true });
     _.unset(newState.entrances, dungeonOrCaveName);
     return newState;
   }
@@ -114,7 +114,7 @@ export default class TrackerState {
   }
 
   toggleLocationChecked(generalLocation, detailedLocation) {
-    const newState = this._clone();
+    const newState = this._clone({ locationsChecked: true });
 
     const isChecked = this.isLocationChecked(generalLocation, detailedLocation);
     _.set(newState.locationsChecked, [generalLocation, detailedLocation], !isChecked);
@@ -126,52 +126,55 @@ export default class TrackerState {
     return _.get(this.itemsForLocations, [generalLocation, detailedLocation]);
   }
 
+  getLocationsForItem(itemName) {
+    const locationsForItem = [];
+
+    _.forEach(this.itemsForLocations, (generalLocationData, generalLocation) => {
+      _.forEach(generalLocationData, (itemAtLocation, detailedLocation) => {
+        if (itemAtLocation === itemName) {
+          locationsForItem.push({
+            generalLocation,
+            detailedLocation,
+          });
+        }
+      });
+    });
+
+    return locationsForItem;
+  }
+
   setItemForLocation(itemName, generalLocation, detailedLocation) {
-    const newState = this._clone();
+    const newState = this._clone({ itemsForLocations: true });
     _.set(newState.itemsForLocations, [generalLocation, detailedLocation], itemName);
     return newState;
   }
 
   unsetItemForLocation(generalLocation, detailedLocation) {
-    const newState = this._clone();
+    const newState = this._clone({ itemsForLocations: true });
     _.set(newState.itemsForLocations, [generalLocation, detailedLocation], null);
     return newState;
   }
 
-  setStartingIsland(islandName) {
-    const newState = this._clone();
-    newState.startingIsland = islandName;
-
-    // TODO:
-    // Macros.setMacro(`Can Travel to ${islandName}`, 'Nothing');
-    // console.log(Macros.macros)
-
-    // Memoizer.invalidate([
-    //   LogicCalculation.isLocationAvailable,
-    //   LogicCalculation._itemsRemainingForRequirement,
-    // ]);
-
-    // const rawRequirements = LogicHelper._rawRequirementsForLocation('Outset Island', "Underneath Link's House");
-    // console.log( rawRequirements );
-    // console.log( LogicHelper._simplifiedItemRequirements(rawRequirements) );
-
-    // const requirements = LogicHelper.requirementsForLocation('Outset Island', "Underneath Link's House");
-    // console.log( requirements );
-
-    // const logic = new LogicCalculation(newState);
-    // console.log( logic.isLocationAvailable('Outset Island', "Underneath Link's House") );
-
-    return newState;
-  }
-
-  _clone() {
+  _clone({
+    entrances: cloneEntrances,
+    items: cloneItems,
+    locationsChecked: cloneLocationsChecked,
+    itemsForLocations: cloneItemsForLocations,
+  }) {
     const newState = new TrackerState();
 
-    newState.entrances = _.clone(this.entrances);
-    newState.items = _.clone(this.items);
-    newState.locationsChecked = _.cloneDeep(this.locationsChecked);
-    newState.itemsForLocations = _.cloneDeep(this.itemsForLocations);
-    newState.startingIsland = _.clone(this.startingIsland);
+    newState.entrances = cloneEntrances
+      ? _.clone(this.entrances)
+      : this.entrances;
+    newState.items = cloneItems
+      ? _.clone(this.items)
+      : this.items;
+    newState.locationsChecked = cloneLocationsChecked
+      ? _.cloneDeep(this.locationsChecked)
+      : this.locationsChecked;
+    newState.itemsForLocations = cloneItemsForLocations
+      ? _.cloneDeep(this.itemsForLocations)
+      : this.itemsForLocations;
 
     return newState;
   }

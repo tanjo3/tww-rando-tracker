@@ -8,6 +8,7 @@ import LogicHelper from '../services/logic-helper';
 import TrackerController from '../services/tracker-controller';
 
 import Buttons from './buttons';
+import ColorPickerWindow from './color-picker-window';
 import Images from './images';
 import ItemsTable from './items-table';
 import LocationsTable from './locations-table';
@@ -22,6 +23,13 @@ class Tracker extends React.PureComponent {
     super(props);
 
     this.state = {
+      colorPickerOpen: false,
+      colors: {
+        extraLocationsBackground: null,
+        itemsTableBackground: null,
+        sphereTrackingBackground: null,
+        statisticsBackground: null,
+      },
       disableLogic: false,
       entrancesListOpen: false,
       isLoading: true,
@@ -30,7 +38,6 @@ class Tracker extends React.PureComponent {
       openedExit: null,
       openedLocation: null,
       openedLocationIsDungeon: null,
-      singleColorBackground: false,
       startingIslandListOpen: false,
       trackSpheres: false,
     };
@@ -41,15 +48,16 @@ class Tracker extends React.PureComponent {
     this.clearRaceModeBannedLocations = this.clearRaceModeBannedLocations.bind(this);
     this.decrementItem = this.decrementItem.bind(this);
     this.incrementItem = this.incrementItem.bind(this);
+    this.toggleColorPicker = this.toggleColorPicker.bind(this);
     this.toggleDisableLogic = this.toggleDisableLogic.bind(this);
     this.toggleEntrancesList = this.toggleEntrancesList.bind(this);
     this.toggleLocationChecked = this.toggleLocationChecked.bind(this);
     this.toggleOnlyProgressLocations = this.toggleOnlyProgressLocations.bind(this);
-    this.toggleSingleColorBackground = this.toggleSingleColorBackground.bind(this);
     this.toggleStartingIslandList = this.toggleStartingIslandList.bind(this);
     this.toggleTrackSpheres = this.toggleTrackSpheres.bind(this);
     this.unsetExit = this.unsetExit.bind(this);
     this.unsetLastLocation = this.unsetLastLocation.bind(this);
+    this.updateColors = this.updateColors.bind(this);
     this.updateEntranceForExit = this.updateEntranceForExit.bind(this);
     this.updateOpenedExit = this.updateOpenedExit.bind(this);
     this.updateOpenedLocation = this.updateOpenedLocation.bind(this);
@@ -58,6 +66,11 @@ class Tracker extends React.PureComponent {
 
   async initialize() {
     await Images.importImages();
+
+    const preferences = Storage.loadPreferences();
+    if (!_.isNil(preferences)) {
+      this.updatePreferences(preferences);
+    }
 
     const {
       loadProgress,
@@ -202,9 +215,7 @@ class Tracker extends React.PureComponent {
   toggleDisableLogic() {
     const { disableLogic } = this.state;
 
-    this.setState({
-      disableLogic: !disableLogic,
-    });
+    this.updatePreferences({ disableLogic: !disableLogic });
   }
 
   clearOpenedMenus() {
@@ -284,16 +295,14 @@ class Tracker extends React.PureComponent {
   toggleOnlyProgressLocations() {
     const { onlyProgressLocations } = this.state;
 
-    this.setState({
-      onlyProgressLocations: !onlyProgressLocations,
-    });
+    this.updatePreferences({ onlyProgressLocations: !onlyProgressLocations });
   }
 
-  toggleSingleColorBackground() {
-    const { singleColorBackground } = this.state;
+  toggleColorPicker() {
+    const { colorPickerOpen } = this.state;
 
     this.setState({
-      singleColorBackground: !singleColorBackground,
+      colorPickerOpen: !colorPickerOpen,
     });
   }
 
@@ -312,17 +321,42 @@ class Tracker extends React.PureComponent {
   toggleTrackSpheres() {
     const { trackSpheres } = this.state;
 
-    this.setState({
-      trackSpheres: !trackSpheres,
-    });
+    this.updatePreferences({ trackSpheres: !trackSpheres });
   }
 
   unsetLastLocation() {
     this.setState({ lastLocation: null });
   }
 
+  updateColors(colorChanges) {
+    this.updatePreferences({ colors: colorChanges });
+  }
+
+  updatePreferences(preferenceChanges) {
+    const {
+      colors,
+      disableLogic,
+      onlyProgressLocations,
+      trackSpheres,
+    } = this.state;
+
+    const existingPreferences = {
+      colors,
+      disableLogic,
+      onlyProgressLocations,
+      trackSpheres,
+    };
+
+    const newPreferences = _.merge({}, existingPreferences, preferenceChanges);
+
+    this.setState(newPreferences);
+    Storage.savePreferences(newPreferences);
+  }
+
   render() {
     const {
+      colorPickerOpen,
+      colors,
       disableLogic,
       entrancesListOpen,
       isLoading,
@@ -333,12 +367,18 @@ class Tracker extends React.PureComponent {
       openedLocation,
       openedLocationIsDungeon,
       saveData,
-      singleColorBackground,
       spheres,
       startingIslandListOpen,
       trackSpheres,
       trackerState,
     } = this.state;
+
+    const {
+      extraLocationsBackground,
+      itemsTableBackground,
+      sphereTrackingBackground,
+      statisticsBackground,
+    } = colors;
 
     let content;
 
@@ -353,12 +393,15 @@ class Tracker extends React.PureComponent {
         <div className="tracker-container">
           <div className="tracker">
             <ItemsTable
+              backgroundColor={itemsTableBackground}
               decrementItem={this.decrementItem}
               incrementItem={this.incrementItem}
-              singleColorBackground={singleColorBackground}
+              spheres={spheres}
               trackerState={trackerState}
+              trackSpheres={trackSpheres}
             />
             <LocationsTable
+              backgroundColor={extraLocationsBackground}
               clearOpenedMenus={this.clearOpenedMenus}
               clearRaceModeBannedLocations={this.clearRaceModeBannedLocations}
               decrementItem={this.decrementItem}
@@ -370,7 +413,6 @@ class Tracker extends React.PureComponent {
               openedExit={openedExit}
               openedLocation={openedLocation}
               openedLocationIsDungeon={openedLocationIsDungeon}
-              singleColorBackground={singleColorBackground}
               spheres={spheres}
               startingIslandListOpen={startingIslandListOpen}
               toggleLocationChecked={this.toggleLocationChecked}
@@ -383,31 +425,42 @@ class Tracker extends React.PureComponent {
               updateStartingIsland={this.updateStartingIsland}
             />
             <Statistics
+              backgroundColor={statisticsBackground}
               disableLogic={disableLogic}
               logic={logic}
               onlyProgressLocations={onlyProgressLocations}
-              singleColorBackground={singleColorBackground}
             />
           </div>
           {trackSpheres && (
             <SphereTracking
+              backgroundColor={sphereTrackingBackground}
               lastLocation={lastLocation}
               trackerState={trackerState}
               unsetLastLocation={this.unsetLastLocation}
             />
           )}
+          {colorPickerOpen && (
+            <ColorPickerWindow
+              extraLocationsBackground={extraLocationsBackground}
+              itemsTableBackground={itemsTableBackground}
+              sphereTrackingBackground={sphereTrackingBackground}
+              statisticsBackground={statisticsBackground}
+              toggleColorPicker={this.toggleColorPicker}
+              updateColors={this.updateColors}
+            />
+          )}
           <Buttons
+            colorPickerOpen={colorPickerOpen}
             disableLogic={disableLogic}
             entrancesListOpen={entrancesListOpen}
             onlyProgressLocations={onlyProgressLocations}
             saveData={saveData}
-            singleColorBackground={singleColorBackground}
             startingIslandListOpen={startingIslandListOpen}
             trackSpheres={trackSpheres}
+            toggleColorPicker={this.toggleColorPicker}
             toggleDisableLogic={this.toggleDisableLogic}
             toggleEntrancesList={this.toggleEntrancesList}
             toggleOnlyProgressLocations={this.toggleOnlyProgressLocations}
-            toggleSingleColorBackground={this.toggleSingleColorBackground}
             toggleStartingIslandList={this.toggleStartingIslandList}
             toggleTrackSpheres={this.toggleTrackSpheres}
           />
@@ -427,7 +480,7 @@ class Tracker extends React.PureComponent {
 Tracker.propTypes = {
   loadProgress: PropTypes.bool.isRequired,
   match: PropTypes.shape({
-    params: PropTypes.shape({
+    params: PropTypes.exact({
       permalink: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,

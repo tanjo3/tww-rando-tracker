@@ -28,79 +28,63 @@ export default class BooleanExpression {
     orInitialValue,
     orReducer,
   }) {
-    const reducerArguments = ([accumulator, item, index, collection]) => {
-      if (BooleanExpression._isExpression(item)) {
-        const reducedItem = item.reduce({
+    return this._map({
+      handleAnd: (items, recursiveMappingFunc) => (
+        _.reduce(
+          items,
+          (accumulator, unmappedItem) => {
+            const { isMapped, item } = recursiveMappingFunc(unmappedItem);
+
+            return andReducer({
+              accumulator,
+              item,
+              isReduced: isMapped,
+            });
+          },
           andInitialValue,
-          andReducer,
+        )
+      ),
+      handleOr: (items, recursiveMappingFunc) => (
+        _.reduce(
+          items,
+          (accumulator, unmappedItem) => {
+            const { isMapped, item } = recursiveMappingFunc(unmappedItem);
+
+            return orReducer({
+              accumulator,
+              item,
+              isReduced: isMapped,
+            });
+          },
           orInitialValue,
-          orReducer,
-        });
-
-        return {
-          accumulator,
-          item: reducedItem,
-          isReduced: true,
-          index,
-          collection,
-        };
-      }
-      return {
-        accumulator,
-        item,
-        isReduced: false,
-        index,
-        collection,
-      };
-    };
-
-    if (this.isAnd()) {
-      return _.reduce(
-        this.items,
-        (...args) => andReducer(
-          reducerArguments(args),
-        ),
-        andInitialValue,
-      );
-    }
-
-    if (this.isOr()) {
-      return _.reduce(
-        this.items,
-        (...args) => orReducer(
-          reducerArguments(args),
-        ),
-        orInitialValue,
-      );
-    }
-
-    throw Error(`Invalid type: ${this.type}`);
-  }
-
-  evaluate({ isItemTrue }) {
-    return this.reduce({
-      andInitialValue: true,
-      andReducer: ({
-        accumulator,
-        item,
-        isReduced,
-      }) => accumulator && (isReduced ? item : isItemTrue(item)),
-      orInitialValue: false,
-      orReducer: ({
-        accumulator,
-        item,
-        isReduced,
-      }) => accumulator || (isReduced ? item : isItemTrue(item)),
+        )
+      ),
     });
   }
 
-  simplify({
-    implies,
-    iterations = 3,
-  }) {
+  evaluate({ isItemTrue }) {
+    return this._map({
+      handleAnd: (items, recursiveMappingFunc) => (
+        _.every(items, (unmappedItem) => {
+          const { isMapped, item } = recursiveMappingFunc(unmappedItem);
+
+          return isMapped ? item : isItemTrue(item);
+        })
+      ),
+      handleOr: (items, recursiveMappingFunc) => (
+        _.some(items, (unmappedItem) => {
+          const { isMapped, item } = recursiveMappingFunc(unmappedItem);
+
+          return isMapped ? item : isItemTrue(item);
+        })
+      ),
+    });
+  }
+
+  simplify({ implies }) {
     let updatedExpression = this._flatten();
 
-    for (let i = 1; i <= iterations; i += 1) {
+    for (let i = 1; i <= 3; i += 1) {
       updatedExpression = updatedExpression._removeDuplicateChildren(implies);
       updatedExpression = updatedExpression._removeDuplicateExpressions(implies);
     }
@@ -112,6 +96,33 @@ export default class BooleanExpression {
     AND: 'and',
     OR: 'or',
   };
+
+  _map({ handleAnd, handleOr }) {
+    const recursiveMappingFunc = (item) => {
+      if (BooleanExpression._isExpression(item)) {
+        const mappedItem = item._map({ handleAnd, handleOr });
+
+        return {
+          item: mappedItem,
+          isMapped: true,
+        };
+      }
+      return {
+        item,
+        isMapped: false,
+      };
+    };
+
+    if (this.isAnd()) {
+      return handleAnd(this.items, recursiveMappingFunc);
+    }
+
+    if (this.isOr()) {
+      return handleOr(this.items, recursiveMappingFunc);
+    }
+
+    throw Error(`Invalid type: ${this.type}`);
+  }
 
   _oppositeType() {
     if (this.isAnd()) {
