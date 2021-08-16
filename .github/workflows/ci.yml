@@ -40,10 +40,10 @@ jobs:
           npm run lint
 
       - name: Deploy
-        if: github.repository == 'wooferzfg/tww-rando-tracker' && github.ref == 'refs/heads/main'
+        if: github.repository == 'tanjo3/tww-rando-tracker' && github.ref == 'refs/heads/dvim-tracker'
         uses: peaceiris/actions-gh-pages@v3.8.0
         with:
           personal_token: ${{ secrets.GH_PAGES_DEPLOY }}
           force_orphan: true
-          publish_branch: gh-pages-main
+          publish_branch: gh-pages-dvim
           publish_dir: ./dist
