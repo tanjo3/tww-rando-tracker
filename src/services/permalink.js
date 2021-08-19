@@ -275,21 +275,21 @@ export default class Permalink {
 
     return {
       decode: (binaryString, options) => {
-        var num_starting_items = 0;
+        let numStartingItems = 0;
 
         _.forEach(REGULAR_STARTING_ITEMS, (item) => {
           const itemValue = binaryString.popNumber(1);
           _.set(options, [optionName, item], itemValue);
-          num_starting_items += itemValue;
+          numStartingItems += itemValue;
         });
 
         _.forEach(PROGRESSIVE_STARTING_ITEMS, (item) => {
           const itemValue = binaryString.popNumber(2);
           _.set(options, [optionName, item], itemValue);
-          num_starting_items += itemValue;
+          numStartingItems += itemValue;
         });
 
-        _.set(options, "num_starting_items", num_starting_items);
+        _.set(options, 'num_starting_items', numStartingItems);
       },
       encode: (binaryString, options) => {
         _.forEach(REGULAR_STARTING_ITEMS, (item) => {
@@ -322,12 +322,12 @@ export default class Permalink {
 
     return {
       decode: (binaryString, options) => {
-        const numBits = (Math.max(0, maxValue - minValue - _.get(options, "num_starting_items"))).toString(2).length;
+        const numBits = (Math.max(0, maxValue - minValue - _.get(options, 'num_starting_items'))).toString(2).length;
         const spinBoxValue = binaryString.popNumber(numBits);
         _.set(options, optionName, spinBoxValue);
       },
       encode: (binaryString, options) => {
-        const numBits = (Math.max(0, maxValue - minValue - _.get(options, "num_starting_items"))).toString(2).length;
+        const numBits = (Math.max(0, maxValue - minValue - _.get(options, 'num_starting_items'))).toString(2).length;
         const spinBoxValue = _.get(options, optionName);
 
         if (_.isNil(spinBoxValue)) {
