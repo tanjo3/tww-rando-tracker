@@ -85,11 +85,11 @@ export default class Settings {
     const optionValue = this.getOptionValue(Permalink.OPTIONS.NUM_STARTING_TRIFORCE_SHARDS);
     const numStartingShards = Number(optionValue);
 
-    if (isNaN(numStartingShards)) {
+    if (Number.isNaN(numStartingShards)) {
       return 0;
-    } else {
-      return numStartingShards;
     }
+
+    return numStartingShards;
   }
 
   static _FLAGS_MAPPING = {

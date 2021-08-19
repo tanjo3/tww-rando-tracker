@@ -32,7 +32,8 @@ export default class Spheres {
 
     this.currentSphere = -1;
     const logic = new LogicCalculation(this.temporaryState);
-    for (let i = 0; i < Settings.getOptionValue(Permalink.OPTIONS.ADDITIONAL_STARTING_MAX); i += 1) {
+    const maxStartingItems = Settings.getOptionValue(Permalink.OPTIONS.ADDITIONAL_STARTING_MAX);
+    for (let i = 0; i < maxStartingItems; i += 1) {
       this._updateItemsForLocation('The Great Sea', `Starting Item ${i + 1}`, logic);
     }
 

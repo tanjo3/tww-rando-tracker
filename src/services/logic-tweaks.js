@@ -101,52 +101,53 @@ export default class LogicTweaks {
   }
 
   static _updateDVLocations() {
-    if (Settings.getOptionValue(Permalink.OPTIONS.LOGIC_MOD) === "Glitched \u2013 Lunatic") {
+    if (Settings.getOptionValue(Permalink.OPTIONS.LOGIC_MOD) === 'Glitched \u2013 Lunatic') {
       // TODO: Read changes from a file rather than hard-coding
       Locations.setLocation(
         'Windfall Island',
         'Kane - Place Six Idols on Gate',
         Locations.KEYS.TYPES,
-        'Long Sidequest, Expensive Purchase'
+        'Long Sidequest, Expensive Purchase',
       );
       Locations.setLocation(
         'Windfall Island',
         'Kane - Place Shop Guru Statue on Gate',
         Locations.KEYS.TYPES,
-        'Long Sidequest, Expensive Purchase'
+        'Long Sidequest, Expensive Purchase',
       );
       Locations.setLocation(
         'Windfall Island', 'Kane - Place Postman Statue on Gate',
         Locations.KEYS.TYPES,
         'Long Sidequest',
-        'Expensive Purchase'
+        'Expensive Purchase',
       );
       Locations.setLocation(
         'Windfall Island',
         'Kane - Place Six Flags on Gate',
         Locations.KEYS.TYPES,
-        'Long Sidequest, Expensive Purchase'
+        'Long Sidequest, Expensive Purchase',
       );
       Locations.setLocation(
         'Mailbox',
         "Beedle's Silver Membership Reward",
         Locations.KEYS.TYPES,
-        'Expensive Purchase, Short Sidequest, Misc'
+        'Expensive Purchase, Short Sidequest, Misc',
       );
       Locations.setLocation(
         'Mailbox',
         "Beedle's Gold Membership Reward",
         Locations.KEYS.TYPES,
-        'Expensive Purchase, Short Sidequest, Misc'
+        'Expensive Purchase, Short Sidequest, Misc',
       );
     }
 
-    for (let i = 0; i < Settings.getOptionValue(Permalink.OPTIONS.ADDITIONAL_STARTING_MAX); i += 1) {
+    const maxStartingItems = Settings.getOptionValue(Permalink.OPTIONS.ADDITIONAL_STARTING_MAX);
+    for (let i = 0; i < maxStartingItems; i += 1) {
       Locations.setLocation(
         'The Great Sea',
         `Starting Item ${i + 1}`,
         Locations.KEYS.NEED,
-        'Nothing'
+        'Nothing',
       );
     }
   }
