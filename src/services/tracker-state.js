@@ -3,6 +3,7 @@ import _ from 'lodash';
 import Locations from './locations';
 import LogicHelper from './logic-helper';
 import Macros from './macros';
+import Memoizer from './memoizer';
 
 export default class TrackerState {
   static default() {
@@ -159,7 +160,10 @@ export default class TrackerState {
     Macros.setMacro(`Can Travel to ${islandName}`, 'Nothing');
     newState.startingIsland = islandName;
 
-    LogicHelper.reset();
+    Memoizer.invalidate([
+      LogicHelper.requirementsForEntrance,
+      LogicHelper.requirementsForLocation,
+    ]);
 
     return newState;
   }
