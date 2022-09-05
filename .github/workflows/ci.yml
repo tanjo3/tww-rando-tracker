@@ -12,17 +12,17 @@ jobs:
 
     steps:
       - name: Checkout commit
-        uses: actions/checkout@v2.3.4
+        uses: actions/checkout@v3
 
       - name: Install Node
-        uses: actions/setup-node@v2.4.0
+        uses: actions/setup-node@v3.4.1
         with:
-          node-version: '14.x'
+          node-version: '16.x'
 
       - name: Install npm packages
         run: |
           set -e
-          npm install
+          npm install --force
 
       - name: Build UI
         run: |
@@ -33,6 +33,11 @@ jobs:
         run: |
           set -e
           npm run lint
+
+      - name: Generate docs
+        run: |
+          set -e
+          npm run docs
 
       - name: Deploy
         if: github.repository == 'tanjo3/tww-rando-tracker' && github.ref == 'refs/heads/dvim-tracker'
