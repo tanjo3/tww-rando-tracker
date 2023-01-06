@@ -166,9 +166,6 @@ class ItemsTable extends React.PureComponent {
                       <div className="farores-pearl">
                         {this.item(LogicHelper.ITEMS.FARORES_PEARL)}
                       </div>
-                      <div className="pearl-holder">
-                        <img src={Images.IMAGES.PEARL_HOLDER} alt="" />
-                      </div>
                     </div>
                   </td>
                   <td>

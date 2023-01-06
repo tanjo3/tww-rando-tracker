@@ -567,20 +567,24 @@ button:hover:enabled {
 
 .unavailable-location,
 .unavailable-item {
-  color: #cc2929;
+  color: #ee5253;
 }
 
 .non-progress-location {
-  color: #808000;
+  color: #578dff;
 }
 
 .available-location,
 .available-item {
-  color: #2929cc;
+  color: #1845fb;
+}
+
+.alt-available-location {
+  color: #feca57;
 }
 
 .inconsequential-item {
-  color: #a69b8d;
+  color: #656364;
 }
 
 .tooltip {
