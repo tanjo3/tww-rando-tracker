@@ -41,6 +41,7 @@ class LogicCalculation {
 
   static LOCATION_COLORS = {
     AVAILABLE_LOCATION: 'available-location',
+    ALT_AVAILABLE_LOCATION: 'alt-available-location',
     CHECKED_LOCATION: 'checked-location',
     NON_PROGRESS_LOCATION: 'non-progress-location',
     UNAVAILABLE_LOCATION: 'unavailable-location',
@@ -85,6 +86,38 @@ class LogicCalculation {
     });
 
     const color = LogicCalculation._locationCountsColor(numAvailable, numRemaining, anyProgress);
+
+    return {
+      color,
+      numAvailable,
+      numRemaining,
+    };
+  }
+
+  extraLocationCounts(generalLocation, { isDungeon, onlyProgressLocations, disableLogic }) {
+    const detailedLocations = LogicHelper.filterDetailedLocations(
+      generalLocation,
+      { isDungeon, onlyProgressLocations },
+    );
+
+    let anyProgress = false;
+    let numAvailable = 0;
+    let numRemaining = 0;
+
+    _.forEach(detailedLocations, (detailedLocation) => {
+      if (!this.state.isLocationChecked(generalLocation, detailedLocation)) {
+        if (disableLogic || this.isLocationAvailable(generalLocation, detailedLocation)) {
+          numAvailable += 1;
+
+          if (LogicHelper.isProgressLocation(generalLocation, detailedLocation)) {
+            anyProgress = true;
+          }
+        }
+        numRemaining += 1;
+      }
+    });
+
+    const color = LogicCalculation._extraLocationCountsColor(numAvailable, numRemaining, anyProgress);
 
     return {
       color,
@@ -610,6 +643,19 @@ class LogicCalculation {
     }
     if (anyProgress) {
       return this.LOCATION_COLORS.AVAILABLE_LOCATION;
+    }
+    return this.LOCATION_COLORS.NON_PROGRESS_LOCATION;
+  }
+
+  static _extraLocationCountsColor(numAvailable, numRemaining, anyProgress) {
+    if (numRemaining === 0) {
+      return this.LOCATION_COLORS.CHECKED_LOCATION;
+    }
+    if (numAvailable === 0) {
+      return this.LOCATION_COLORS.UNAVAILABLE_LOCATION;
+    }
+    if (anyProgress) {
+      return this.LOCATION_COLORS.ALT_AVAILABLE_LOCATION;
     }
     return this.LOCATION_COLORS.NON_PROGRESS_LOCATION;
   }

@@ -268,7 +268,7 @@ class ExtraLocation extends React.PureComponent {
       color,
       numAvailable,
       numRemaining,
-    } = logic.locationCounts(locationName, {
+    } = logic.extraLocationCounts(locationName, {
       isDungeon,
       onlyProgressLocations,
       disableLogic,
