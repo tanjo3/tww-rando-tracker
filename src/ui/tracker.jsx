@@ -41,7 +41,7 @@ class Tracker extends React.PureComponent {
       openedLocation: null,
       openedLocationIsDungeon: null,
       trackNonProgressCharts: false,
-      trackSpheres: false,
+      trackSpheres: true,
       viewingEntrances: false,
     };
 
