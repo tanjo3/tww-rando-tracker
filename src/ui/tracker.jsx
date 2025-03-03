@@ -47,7 +47,7 @@ class Tracker extends React.PureComponent {
       showCyclosLocations: false,
       showGhostShipLocations: false,
       trackNonProgressCharts: false,
-      trackSpheres: false,
+      trackSpheres: true,
       viewingEntrances: false,
     };
 
